@@ -94,7 +94,12 @@ class WanInferencePipeline(nn.Module):
             self.wav_feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
                     args.wav2vec_path
                 )
-            self.audio_encoder = Wav2VecModel.from_pretrained(args.wav2vec_path, local_files_only=True).to(device=self.device)
+            # self.audio_encoder = Wav2VecModel.from_pretrained(args.wav2vec_path, local_files_only=True).to(device=self.device)
+            self.audio_encoder = Wav2VecModel.from_pretrained(
+                args.wav2vec_path, 
+                local_files_only=True,
+                attn_implementation="eager"  # 追加
+            ).to(device=self.device)
             self.audio_encoder.feature_extractor._freeze_parameters()
 
     def load_model(self):
